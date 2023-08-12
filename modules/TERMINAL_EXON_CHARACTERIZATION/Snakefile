@@ -1,0 +1,1082 @@
+##############################################################################
+#
+#   Snakemake pipeline:
+#   Terminal exon characterization using TECtool
+#
+#   AUTHOR: Miguel_Barquin
+#   AFFILIATION: University_of_Konstanz
+#   CONTACT: miguel.barquin@uni-konstanz.de
+#   CREATED: 24-05-022
+#   LICENSE: Apache_2.0
+#
+##############################################################################
+
+# imports
+import sys
+import os
+import traceback
+import pandas as pd
+
+# local rules
+localrules: TEC_all, TEC_create_outdir
+
+def get_all_samples_IDs():
+    """
+    Selecting IDs from the design file (all samples)
+    """
+    design_table = pd.read_csv(config["TEC_design_file"], sep="\t")
+    return list(design_table["sample"])
+
+def get_trimmed_fastq_paths_F(wildcards):
+    """
+    Generating paths to the adapter-trimmed, polyA-trimmed
+    fastq files for a given sample
+    """
+    design_table = pd.read_csv(config["TEC_design_file"], sep="\t", \
+        index_col=0, na_values=['nan'], keep_default_na=False)
+    sample_row = design_table.loc[wildcards.sample]
+    if sample_row["fq1"] != "" and sample_row["fq2"] != "":
+        # paired-end sample
+        return expand(
+            os.path.join(
+                config["PQA_outdir"],
+                "tail_trimmed",
+                "{sample}.F.fastq.gz"
+            ),
+            sample = wildcards.sample
+        )
+    # else: single end sample
+    return expand(
+        os.path.join(
+            config["PQA_outdir"],
+            "tail_trimmed",
+            "{sample}._.fastq.gz"
+        ),
+        sample = wildcards.sample
+    )
+
+def get_trimmed_fastq_paths_R(wildcards):
+    """
+    Generating paths to the adapter-trimmed, polyA-trimmed
+    fastq files for a given sample
+    """
+    design_table = pd.read_csv(config["TEC_design_file"], sep="\t", \
+        index_col=0, na_values=['nan'], keep_default_na=False)
+    sample_row = design_table.loc[wildcards.sample]
+    if sample_row["fq1"] != "" and sample_row["fq2"] != "":
+        # paired-end sample
+        return expand(
+            os.path.join(
+                config["PQA_outdir"],
+                "tail_trimmed",
+                "{sample}.R.fastq.gz"
+            ),
+            sample = wildcards.sample
+        )
+    else:
+        # no matching files
+        return []
+
+##############################################################################
+### Target rule with final output of the pipeline
+##############################################################################
+
+rule TEC_all:
+    """
+    Gathering all output
+    """
+    input:
+        PLOTS_DIR_F = expand(
+            os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "plots",
+                "F",
+            ),
+            TEC_output_dir = config["TEC_outdir"],
+            sample = get_all_samples_IDs()
+        ),
+	    PLOTS_DIR_R = expand(
+            os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "plots",
+                "R",
+            ),
+            TEC_output_dir = config["TEC_outdir"],
+            sample = get_all_samples_IDs()
+        ),
+	    GENERAL_TSV = expand(
+            os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "general_nte.tsv"            
+            ),
+            TEC_output_dir = config["TEC_outdir"]
+        )   
+        
+##############################################################################
+### Create directories for the results
+#############################################################################
+
+rule TEC_create_outdir:
+    """
+    Preparing directories for the results
+    """
+    output:
+        TEMP_ = temp(
+            os.path.join(
+                "{TEC_output_dir}",
+                "TEC_outdir"
+            )
+        )
+
+    params:
+        DIR_output_dir = "{TEC_output_dir}",
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log"
+        ),
+        LOG_local_log = os.path.join(
+            "{TEC_output_dir}",
+            "local_log"
+        )
+
+    threads: 1
+
+    conda:
+        "env/bash.yml"
+
+    singularity:
+        "docker://bash:4.4.18"
+
+    shell:
+        """
+        mkdir -p {params.DIR_output_dir}; \
+        mkdir -p {params.LOG_cluster_log}; \
+        mkdir -p {params.LOG_local_log}; \
+        touch {output.TEMP_}
+        """
+
+##############################################################################
+### Align RNA-Seq reads
+##############################################################################
+
+rule TEC_align_reads_F:
+    """
+    Aligning RNA-Seq reads to genome & transcriptome with STAR.
+    """
+    input:
+        TEMP_ = os.path.join(
+            "{TEC_output_dir}",
+            "TEC_outdir"
+        ),
+        FASTQ_sample_files_F = get_trimmed_fastq_paths_F,
+        GTF_genomic_annotation = config["TEC_genomic_annotation"],
+        DIR_genome_index = config["TEC_index"]
+
+    output:
+        BAM_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.bam"
+        ),
+        BAM_transcriptome_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.toTranscriptome.out.bam"
+        )
+
+    params:
+        STRING_storage_efficient_flag = str(config["TEC_storage_efficient"]),
+        STRING_outfile_prefix = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F."
+        ),
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_align_reads_F.{sample}.log"
+        )
+
+    threads: 4
+
+    log:
+        LOG_local_stdout = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_align_reads_F.{sample}.stdout.log"
+        ),
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_align_reads_F.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_align_reads_F.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/STAR.yml"
+
+    singularity:
+        "docker://zavolab/star:2.7.1a"
+
+    shell:
+        """
+        if [ "{params.STRING_storage_efficient_flag}" = "True" ]; then
+            STAR \
+            --runMode alignReads \
+            --twopassMode Basic \
+            --outSAMunmapped None  \
+            --outSAMattributes All \
+            --outReadsUnmapped None \
+            --outFilterType BySJout \
+            --alignEndsType Local \
+            --outFilterMismatchNoverLmax 0.1 \
+            --outFilterScoreMinOverLread 0.66 \
+            --outFilterMatchNminOverLread 0.66 \
+            --outFilterMultimapNmax 10 \
+            --outFilterMultimapScoreRange 0 \
+            --runThreadN {threads} \
+            --genomeDir {input.DIR_genome_index} \
+            --sjdbGTFfile {input.GTF_genomic_annotation} \
+            --readFilesIn {input.FASTQ_sample_files_F} \
+            --readFilesCommand zcat \
+            --outFileNamePrefix {params.STRING_outfile_prefix} \
+            --outSAMtype BAM Unsorted \
+            --quantMode TranscriptomeSAM \
+            1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        else
+            (declare -a decompressed
+            for filegz in {input.FASTQ_sample_files_F}
+            do
+                file=${{filegz/".gz"/""}}
+                gunzip -f -c $filegz > $file
+                decompressed+=($file)
+            done
+            STAR \
+            --runMode alignReads \
+            --twopassMode Basic \
+            --outSAMunmapped None  \
+            --outSAMattributes All \
+            --outReadsUnmapped None \
+            --outFilterType BySJout \
+            --alignEndsType Local \
+            --outFilterMismatchNoverLmax 0.1 \
+            --outFilterScoreMinOverLread 0.66 \
+            --outFilterMatchNminOverLread 0.66 \
+            --outFilterMultimapNmax 10 \
+            --outFilterMultimapScoreRange 0 \
+            --runThreadN {threads} \
+            --genomeDir {input.DIR_genome_index} \
+            --sjdbGTFfile {input.GTF_genomic_annotation} \
+            --readFilesIn ${{decompressed[@]}} \
+            --outFileNamePrefix {params.STRING_outfile_prefix} \
+            --outSAMtype BAM Unsorted \
+            --quantMode TranscriptomeSAM
+            for file in "${{decompressed[@]}}"
+            do
+                rm -f $file
+            done) \
+            1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        fi
+        """
+##############################################################################
+### Align RNA-Seq reads
+##############################################################################
+
+rule TEC_align_reads_R:
+    """
+    Aligning RNA-Seq reads to genome & transcriptome with STAR.
+    """
+    input:
+        FASTQ_sample_files_R = get_trimmed_fastq_paths_R,
+        GTF_genomic_annotation = config["TEC_genomic_annotation"],
+        DIR_genome_index = config["TEC_index"]
+
+    output:
+        BAM_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.bam"
+        ),
+        BAM_transcriptome_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.toTranscriptome.out.bam"
+        )
+
+    params:
+        STRING_storage_efficient_flag = str(config["TEC_storage_efficient"]),
+        STRING_outfile_prefix = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R."
+        ),
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_align_reads_R.{sample}.log"
+        )
+
+    threads: 4
+
+    log:
+        LOG_local_stdout = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_align_reads.R.{sample}.stdout.log"
+        ),
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_align_reads_R.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_align_reads_R.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/STAR.yml"
+
+    singularity:
+        "docker://zavolab/star:2.7.1a"
+
+    shell:
+        """
+        if [ "{params.STRING_storage_efficient_flag}" = "True" ]; then
+            STAR \
+            --runMode alignReads \
+            --twopassMode Basic \
+            --outSAMunmapped None  \
+            --outSAMattributes All \
+            --outReadsUnmapped None \
+            --outFilterType BySJout \
+            --alignEndsType Local \
+            --outFilterMismatchNoverLmax 0.1 \
+            --outFilterScoreMinOverLread 0.66 \
+            --outFilterMatchNminOverLread 0.66 \
+            --outFilterMultimapNmax 10 \
+            --outFilterMultimapScoreRange 0 \
+            --runThreadN {threads} \
+            --genomeDir {input.DIR_genome_index} \
+            --sjdbGTFfile {input.GTF_genomic_annotation} \
+            --readFilesIn {input.FASTQ_sample_files_R} \
+            --readFilesCommand zcat \
+            --outFileNamePrefix {params.STRING_outfile_prefix} \
+            --outSAMtype BAM Unsorted \
+            --quantMode TranscriptomeSAM \
+            1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        else
+            (declare -a decompressed
+            for filegz in {input.FASTQ_sample_files_R}
+            do
+                file=${{filegz/".gz"/""}}
+                gunzip -f -c $filegz > $file
+                decompressed+=($file)
+            done
+            STAR \
+            --runMode alignReads \
+            --twopassMode Basic \
+            --outSAMunmapped None  \
+            --outSAMattributes All \
+            --outReadsUnmapped None \
+            --outFilterType BySJout \
+            --alignEndsType Local \
+            --outFilterMismatchNoverLmax 0.1 \
+            --outFilterScoreMinOverLread 0.66 \
+            --outFilterMatchNminOverLread 0.66 \
+            --outFilterMultimapNmax 10 \
+            --outFilterMultimapScoreRange 0 \
+            --runThreadN {threads} \
+            --genomeDir {input.DIR_genome_index} \
+            --sjdbGTFfile {input.GTF_genomic_annotation} \
+            --readFilesIn ${{decompressed[@]}} \
+            --outFileNamePrefix {params.STRING_outfile_prefix} \
+            --outSAMtype BAM Unsorted \
+            --quantMode TranscriptomeSAM
+            for file in "${{decompressed[@]}}"
+            do
+                rm -f $file
+            done) \
+            1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        fi
+        """
+
+##############################################################################
+### Sort alignment FORWARD files
+##############################################################################
+
+rule TEC_sort_aligned_reads_F:
+    """
+    Sorting genome-aligned RNA-Seq reads with samtools.
+    """
+    input:
+        BAM_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.bam"
+        )
+
+    output:
+        BAM_sorted_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.sorted.bam"
+        )
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_sort_aligned_reads_F.{sample}.log"
+        )
+
+    threads: 4
+
+    log:
+        # standard output stream is used by the tool
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_sort_aligned_reads_F.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_sort_aligned_reads_F.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/samtools.yml"
+
+    singularity:
+        "docker://zavolab/samtools:1.10"
+
+    shell:
+        """
+        samtools sort \
+        -@ {threads} \
+        {input.BAM_genomic_alignments_one_F} \
+        1> {output.BAM_sorted_genomic_alignments_one_F} \
+        2> {log.LOG_local_stderr}
+        """
+
+        
+##############################################################################
+### Sort alignment REVERSE files
+##############################################################################
+
+rule TEC_sort_aligned_reads_R:
+    """
+    Sorting genome-aligned RNA-Seq reads with samtools.
+    """
+    input:
+        BAM_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.bam"
+        )
+
+    output:
+        BAM_sorted_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.sorted.bam"
+        )
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_sort_aligned_reads_R.{sample}.log"
+        )
+
+    threads: 4
+
+    log:
+        # standard output stream is used by the tool
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_sort_aligned_reads_R.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_sort_aligned_reads_R.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/samtools.yml"
+
+    singularity:
+        "docker://zavolab/samtools:1.10"
+
+    shell:
+        """
+        samtools sort \
+        -@ {threads} \
+        {input.BAM_genomic_alignments_one_R} \
+        1> {output.BAM_sorted_genomic_alignments_one_R} \
+        2> {log.LOG_local_stderr}
+        """
+
+##############################################################################
+### Index sorted alignment FORWARD files
+##############################################################################
+
+rule TEC_index_sorted_aligned_reads_F:
+    """
+    Indexing sorted genome-aligned RNA-Seq reads with samtools.
+    """
+    input:
+        BAM_sorted_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.sorted.bam"
+        )
+
+    output:
+        BAI_indexed_sorted_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.sorted.bam.bai"
+        )
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_index_sorted_aligned_reads_F.{sample}.log"
+        )
+
+    threads: 4
+
+    log:
+        # standard output stream is used by the tool
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_index_sorted_aligned_reads_F.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_index_sorted_aligned_reads_F.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/samtools.yml"
+
+    singularity:
+        "docker://zavolab/samtools:1.10"
+
+    shell:
+        """
+        samtools index \
+        -@ {threads} \
+        {input.BAM_sorted_genomic_alignments_one_F} \
+        1> {output.BAI_indexed_sorted_genomic_alignments_one_F} \
+        2> {log.LOG_local_stderr}
+        """
+
+##############################################################################
+### Index sorted alignment REVERSE files
+##############################################################################
+
+rule TEC_index_sorted_aligned_reads_R:
+    """
+    Indexing sorted genome-aligned RNA-Seq reads with samtools.
+    """
+    input:
+        BAM_sorted_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.sorted.bam"
+        )
+
+    output:
+        BAI_indexed_sorted_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.sorted.bam.bai"
+        )
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_index_sorted_aligned_reads_R.{sample}.log"
+        )
+
+    threads: 4
+
+    log:
+        # standard output stream is used by the tool
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_index_sorted_aligned_reads_R.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_index_sorted_aligned_reads_R.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/samtools.yml"
+
+    singularity:
+        "docker://zavolab/samtools:1.10"
+
+    shell:
+        """
+        samtools index \
+        -@ {threads} \
+        {input.BAM_sorted_genomic_alignments_one_R} \
+        1> {output.BAI_indexed_sorted_genomic_alignments_one_R} \
+        2> {log.LOG_local_stderr}
+        """
+
+##############################################################################
+### TECtool FORWARD
+##############################################################################
+
+rule TEC_tectool_F:
+    """
+    Characterizing the terminal exons using TECtool.
+    """
+    input:
+        BED_pas_atlas = config["TEC_pas_atlas"],
+        FASTA_genomic_sequence = config["TEC_genomic_sequence"],
+        GTF_genomic_annotation = config["TEC_genomic_annotation"],
+        BAM_sorted_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.sorted.bam"
+        ),
+        BAI_indexed_sorted_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.sorted.bam.bai"
+        )
+
+    output:
+        DIR_sample_terminal_exon_characterization_results_F = directory(
+            os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "F"
+            )
+        )
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_tectool_F.{sample}.log"
+        )
+
+    threads: 1
+
+    log:
+        LOG_local_stdout = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_tectool_F.{sample}.stdout.log"
+        ),
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_tectool_F.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_tectool_F.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/tectool.yml"
+
+    shell:
+        """
+        tectool \
+        --annotation {input.GTF_genomic_annotation} \
+        --polyasites {input.BED_pas_atlas} \
+        --bam {input.BAM_sorted_genomic_alignments_one_F} \
+        --genome {input.FASTA_genomic_sequence} \
+        --output_dir {output.DIR_sample_terminal_exon_characterization_results_F} \
+        1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        """
+
+
+##############################################################################
+### TECtool REVERSE
+##############################################################################
+
+rule TEC_tectool_R:
+    """
+    Characterizing the terminal exons using TECtool.
+    """
+    input:
+        BED_pas_atlas = config["TEC_pas_atlas"],
+        FASTA_genomic_sequence = config["TEC_genomic_sequence"],
+        GTF_genomic_annotation = config["TEC_genomic_annotation"],
+        BAM_sorted_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.sorted.bam"
+        ),
+        BAI_indexed_sorted_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.sorted.bam.bai"
+        )
+
+    output:
+        DIR_sample_terminal_exon_characterization_results_R = directory(
+            os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "R"
+            )
+        )
+    resources:
+        mem_mb = 40000
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_tectool_R.{sample}.log"
+        )
+
+    threads: 1
+
+    log:
+        LOG_local_stdout = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_tectool_R.{sample}.stdout.log"
+        ),
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_tectool_R.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_tectool_R.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/tectool.yml"
+
+    shell:
+        """
+        tectool \
+        --annotation {input.GTF_genomic_annotation} \
+        --polyasites {input.BED_pas_atlas} \
+        --bam {input.BAM_sorted_genomic_alignments_one_R} \
+        --genome {input.FASTA_genomic_sequence} \
+        --output_dir {output.DIR_sample_terminal_exon_characterization_results_R} \
+        1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        """
+
+#############################################################################
+## Plot novel terminal exon F
+#############################################################################
+
+rule TEC_plot_novel_terminal_exons_F:
+    """
+    Plotting novel terminal exons into a PDF file.
+    """
+    input:
+        DIR_sample_terminal_exon_characterization_results_F = os.path.join(
+            "{TEC_output_dir}",
+            "tectool_quantification",
+            "{sample}",
+            "F"
+        ),
+        GTF_genomic_annotation = config["TEC_genomic_annotation"],
+        BED_pas_atlas = config["TEC_pas_atlas"],
+        BAM_sorted_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.sorted.bam"
+        ),
+        BAI_indexed_sorted_genomic_alignments_one_F = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.F.Aligned.out.sorted.bam.bai"
+        ),
+        SCRIPT_ = os.path.join(
+            config["TEC_scripts_dir"],
+            "plot.sh"
+        )
+
+    output:
+        PLOTS_DIR_F = directory(
+            os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "plots",
+                "F",
+            )
+        )
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_plot_novel_terminal_exons_F.{sample}.log"
+        )
+
+    threads: 1
+
+    log:
+        LOG_local_stdout = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_plot_novel_terminal_exons_F.{sample}.stdout.log"
+        ),
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_plot_novel_terminal_exons_F.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_plot_novel_terminal_exons_F.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/plot.yml"
+
+    shell:
+        """
+        bash {input.SCRIPT_} \
+        -i {input.DIR_sample_terminal_exon_characterization_results_F} \
+        -g {input.GTF_genomic_annotation} \
+        -b {input.BED_pas_atlas} \
+        -r {input.BAM_sorted_genomic_alignments_one_F} \
+        -o {output.PLOTS_DIR_F} \
+        1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        """
+
+#############################################################################
+## Plot novel terminal exon R
+#############################################################################
+
+rule TEC_plot_novel_terminal_exons_R:
+    """
+    Plotting novel terminal exons into a PDF file.
+    """
+    input:
+        DIR_sample_terminal_exon_characterization_results_R = os.path.join(
+            "{TEC_output_dir}",
+            "tectool_quantification",
+            "{sample}",
+            "R"
+        ),
+        GTF_genomic_annotation = config["TEC_genomic_annotation"],
+        BED_pas_atlas = config["TEC_pas_atlas"],
+        BAM_sorted_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.sorted.bam"
+        ),
+        BAI_indexed_sorted_genomic_alignments_one_R = os.path.join(
+            "{TEC_output_dir}",
+            "alignments",
+            "{sample}",
+            "{sample}.R.Aligned.out.sorted.bam.bai"
+        ),
+        SCRIPT_ = os.path.join(
+            config["TEC_scripts_dir"],
+            "plot.sh"
+        )
+
+    output:
+        PLOTS_DIR_R = directory(
+            os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "plots",
+                "R",
+            )
+        )
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_plot_novel_terminal_exons_R.{sample}.log"
+        )
+
+    threads: 1
+
+    log:
+        LOG_local_stdout = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_plot_novel_terminal_exons_R.{sample}.stdout.log"
+        ),
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_plot_novel_terminal_exons_R.{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_plot_novel_terminal_exons_R.{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/plot.yml"
+
+    shell:
+        """
+        bash {input.SCRIPT_} \
+        -i {input.DIR_sample_terminal_exon_characterization_results_R} \
+        -g {input.GTF_genomic_annotation} \
+        -b {input.BED_pas_atlas} \
+        -r {input.BAM_sorted_genomic_alignments_one_R} \
+        -o {output.PLOTS_DIR_R} \
+        1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        """
+##############################################################################
+### Merging step to get final tsv with forward and reverse reults
+##############################################################################
+
+rule TEC_merging_forward_reverse_tsv:
+    """
+    Merging forward and reverse tsv files to get a final one.
+    """
+    input:
+        DIR_sample_terminal_exon_characterization_results_F = os.path.join(
+            "{TEC_output_dir}",
+            "tectool_quantification",
+            "{sample}",
+            "F"
+        ),
+        DIR_sample_terminal_exon_characterization_results_R = os.path.join(
+            "{TEC_output_dir}",
+            "tectool_quantification",
+            "{sample}",
+            "R"
+        ),
+        SCRIPT_ = os.path.join(
+            config["TEC_scripts_dir"],
+            "tsv_unification.py"
+        )
+
+    output:
+        FINAL_TSV = os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "final_nte.tsv"
+            )
+
+    params:
+        LOG_cluster_log = os.path.join(
+            "{TEC_output_dir}",
+            "cluster_log",
+            "TEC_merging_forward_reverse_tsv_{sample}.log"
+        )
+
+    threads: 1
+
+    log:
+        LOG_local_stdout = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_merging_forward_reverse_tsv_{sample}.stdout.log"
+        ),
+        LOG_local_stderr = os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_merging_forward_reverse_tsv_{sample}.stderr.log"
+        )
+
+    benchmark:
+        os.path.join(
+            "{TEC_output_dir}",
+            "local_log",
+            "TEC_merging_forward_reverse_tsv_{sample}.benchmark.log"
+        )
+
+    conda:
+        "env/python.yml"
+
+    singularity:
+        "docker://zavolab/mapp_base_python:1.1.1"
+
+    shell:
+        """
+        python {input.SCRIPT_} \
+        --forward-tsv {input.DIR_sample_terminal_exon_characterization_results_F} \
+        --reverse-tsv {input.DIR_sample_terminal_exon_characterization_results_R} \
+        --final-tsv {output.FINAL_TSV} \
+        1> {log.LOG_local_stdout} 2> {log.LOG_local_stderr}
+        """

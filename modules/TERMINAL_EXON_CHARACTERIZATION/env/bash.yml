@@ -1,0 +1,23 @@
+###############################################################################
+#
+#   Software to be installed in the environment
+#
+#   AUTHOR: Miguel_Barquin
+#   AFFILIATION: University_of_Konstanz
+#   CONTACT: miguel.barquin@uni-konstanz.de
+#   CREATED: 27-05-2022
+#   LICENSE: Apache_2.0
+#
+###############################################################################
+---
+
+name: bash-4-4-18
+
+channels:
+  - conda-forge
+
+dependencies:
+  - bash=4.4.18
+  - bzip2=1.0.8
+
+...

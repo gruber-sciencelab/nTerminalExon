@@ -1,16 +1,17 @@
 ##############################################################################
 #
-#   Snakemake pipeline: MAPP
+#   Snakemake pipeline: nTE
 #
 #   AUTHOR: Maciej_Bak
 #   AFFILIATION: University_of_Basel
-#   AFFILIATION: Swiss_Institute_of_Bioinformatics
-#   CONTACT: maciej.bak@unibas.ch
-#   CREATED: 30-06-2020
-#   LICENSE: Apache_2.0
+#   MODIFICATION: Miguel_Barquin
+#   AFFILIATION: University_of_Konstaz
+#   CREATED: 20-03-2020
+#   MODIFIED: 14-02-2023
+#   CONTACT: miguel.barquin@uni-konstanz.de
 #
 ##############################################################################
-#hola
+
 # imports
 import sys
 import os
@@ -19,10 +20,10 @@ import pandas as pd
 # local rules
 localrules: all
 
-# create logging directory for the top-level rules of MAPP summary
+# create logging directory for the top-level rules of nTE summary
 os.makedirs(
     os.path.join(
-        config["MAPP_pipeline_directory"],
+        config["nTE_pipeline_directory"],
         "logs",
     ),
     exist_ok = True
@@ -60,25 +61,17 @@ rule all:
         )
 
 ##############################################################################
-### Include all MAPP modules:
+### Include all nTE modules:
 ##############################################################################
 
 include: "modules/PREPROCESSING/Snakefile"
-include: "modules/CREATE_SITECOUNT_MATRICES/Snakefile"
-include: "modules/PREPARE_TANDEM_PAS/Snakefile"
-include: "modules/PAQR/Snakefile"
-include: "modules/KAPAC/Snakefile"
-include: "modules/EXTRACT_AS_EXONS/Snakefile"
-include: "modules/QUANTIFICATION/Snakefile"
-include: "modules/MAEI/Snakefile"
-include: "modules/REPORT_RESULTS/Snakefile"
 #include: "modules/TERMINAL_EXON_CHARACTERIZATION/Snakefile"
 
 ##############################################################################
 ### Collect files for summary:
 ##############################################################################
 
-rule MAPP_collect_summary:
+rule nTE_collect_summary:
     """
     Copy relevant text files and Motif Activity Heatmaps
     """

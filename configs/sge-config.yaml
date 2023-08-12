@@ -1,0 +1,613 @@
+__default__:
+  time: "01:00:00"
+  mem: "8000"
+  error: "{params.LOG_cluster_log}"
+  output: "/dev/null"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_create_genome_index:
+  time: "02:00:00"
+  mem: "10000"
+  pe: "smp 8"
+  qname: "scc"
+
+PQA_prepare_adapters_textfiles:
+  time: "00:15:00"
+  mem: "2000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_run_FastQC:
+  time: "05:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_remove_adapters_pe:
+  time: "02:00:00"
+  mem: "3000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_remove_adapters_se:
+  time: "02:00:00"
+  mem: "3000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_remove_polyA_polyT_tails_pe:
+  time: "04:00:00"
+  mem: "3000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_remove_polyA_polyT_tails_se:
+  time: "04:00:00"
+  mem: "3000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_align_reads:
+  time: "23:59:59"
+  mem: "10000"
+  pe: "smp 4"
+  qname: "scc"
+
+PQA_sort_aligned_reads:
+  time: "02:00:00"
+  mem: "10000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_index_aligned_reads:
+  time: "02:00:00"
+  mem: "1000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_collapse_genomic_annotation:
+  time: "02:30:00"
+  mem: "4000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_mapping_quality_analysis:
+  time: "02:00:00"
+  mem: "1000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_merge_mapping_quality_tables:
+  time: "00:15:00"
+  mem: "1000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_extract_transcripts_as_bed12:
+  time: "02:00:00"
+  mem: "4000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_calculate_TIN_scores:
+  time: "06:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_merge_TIN_scores:
+  time: "00:35:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_merge_mapping_quality_tables_star:
+  time: "00:35:00"
+  mem: "1000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_calculate_median_TIN_score:
+  time: "00:35:00"
+  mem: "3000"
+  pe: "smp 1"
+  qname: "scc"
+
+PQA_filter_design_table:
+  time: "00:15:00"
+  mem: "3000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_align_reads_F:
+  time: "23:59:59"
+  mem: "10000"
+  pe: "smp 4"
+  qname: "scc"
+
+TEC_align_reads_R:
+  time: "23:59:59"
+  mem: "10000"
+  pe: "smp 4"
+  qname: "scc"
+
+TEC_sort_aligned_reads_F:
+  time: "02:00:00"
+  mem: "10000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_sort_aligned_reads_R:
+  time: "02:00:00"
+  mem: "10000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_index_sorted_aligned_reads_F:
+  time: "02:00:00"
+  mem: "1000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_index_sorted_aligned_reads_R:
+  time: "02:00:00"
+  mem: "1000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_tectool_F:
+  time: "119:59:59"
+  mem: "40000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_tectool_R:
+  time: "119:59:59"
+  mem: "40000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_plot_novel_terminal_exons_F:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_plot_novel_terminal_exons_R:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_merging_forward_reverse_tsv:
+  time: "00:15:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+TEC_all_tsv:
+  time: "00:15:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+ASE_build_genome_index:
+  time: "03:30:00"
+  mem: "20000"
+  pe: "smp 1"
+  qname: "scc"
+
+ASE_generate_skipped_exon_events:
+  time: "03:30:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+ASE_filter_events:
+  time: "03:30:00"
+  mem: "10000"
+  pe: "smp 1"
+  qname: "scc"
+
+ASE_cluster_events:
+  time: "05:00:00"
+  mem: "20000"
+  pe: "smp 1"
+  qname: "scc"
+
+ASE_select_representative_events:
+  time: "00:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+ASE_format_events_into_bed:
+  time: "00:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+ASE_extract_splice_sites_coordinates:
+  time: "00:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+TPA_select_tandem_pas:
+  time: "04:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+TPA_select_terminal_exon_pas:
+  time: "00:40:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+TPA_filter_on_ambiguous_annotation:
+  time: "08:00:00"
+  mem: "20000"
+  pe: "smp 1"
+  qname: "scc"
+
+TPA_extract_representative_sites_coord:
+  time: "00:35:00"
+  mem: "1000"
+  pe: "smp 1"
+  qname: "scc"
+
+QEI_extract_transcriptome:
+  time: "03:30:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+QEI_quantify_expression:
+  time: "02:00:00"
+  mem: "10000"
+  pe: "smp 8"
+  qname: "scc"
+
+QEI_merge_expression_values:
+  time: "01:00:00"
+  mem: "30000"
+  pe: "smp 1"
+  qname: "scc"
+
+QEI_filter_expression_tables:
+  time: "01:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+QEI_calculate_exon_inclusion_scores:
+  time: "23:59:00"
+  mem: "30000"
+  pe: "smp 1"
+  qname: "scc"
+
+PAQ_create_coverages:
+  time: "08:00:00"
+  mem: "10000"
+  pe: "smp 4"
+  qname: "scc"
+
+PAQ_infer_relative_usage:
+  time: "167:59:00"
+  mem: "10000"
+  pe: "smp 12"
+  qname: "scc"
+
+PAQ_relative_pas_positions:
+  time: "01:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+PAQ_normalize_expression:
+  time: "01:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+PAQ_filter_on_expression:
+  time: "00:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_extract_window_coord_and_sequence:
+  time: "03:30:00"
+  mem: "18000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_kmer_sitecount_matrices_TSS:
+  time: "10:00:00"
+  mem: "30000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_kmer_sitecount_matrices_3ss:
+  time: "07:00:00"
+  mem: "30000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_kmer_sitecount_matrices_5ss:
+  time: "07:00:00"
+  mem: "30000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_kmer_sitecount_matrices_pas:
+  time: "07:00:00"
+  mem: "30000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_prepare_MotEvo_parameters:
+  time: "01:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_prepare_sequences_for_MotEvo:
+  time: "01:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_MotEvo_analysis_TSS:
+  time: "03:35:00"
+  mem: "18000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_MotEvo_analysis_3ss:
+  time: "03:35:00"
+  mem: "18000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_MotEvo_analysis_5ss:
+  time: "03:35:00"
+  mem: "18000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_MotEvo_analysis_pas:
+  time: "03:35:00"
+  mem: "18000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_MotEvo_sitecount_matrices_TSS:
+  time: "02:30:00"
+  mem: "18000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_MotEvo_sitecount_matrices_3ss:
+  time: "02:30:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_MotEvo_sitecount_matrices_5ss:
+  time: "02:30:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_MotEvo_sitecount_matrices_pas:
+  time: "02:30:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CSM_create_links_to_matrices:
+  time: "01:35:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CEI_calculate_PSI:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CEI_filter_3ss_SCM_matrices:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CEI_filter_5ss_SCM_matrices:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CEI_filter_PSI_table:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CEI_prepare_inclusion_table:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CPE_create_polyA_site_to_exon_mapping:
+  time: "01:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CPE_filter_PAS_SCM_matrices:
+  time: "02:00:00"
+  mem: "20000"
+  pe: "smp 1"
+  qname: "scc"
+
+CPE_filter_PAS_table:
+  time: "01:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+CPE_select_pas_expression_columns:
+  time: "01:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+
+CPE_tag_overlapping_polyA_sites:
+  time: "01:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+
+KATE_3ss:
+  time: "167:59:00"
+  mem: "10000"
+  pe: "smp 9"
+  qname: "scc"
+
+KATE_5ss:
+  time: "167:59:00"
+  mem: "10000"
+  pe: "smp 9"
+  qname: "scc"
+
+KATE_TSS:
+  time: "167:59:00"
+  mem: "20000"
+  pe: "smp 10"
+  qname: "scc"
+
+KATE_PAS:
+  time: "167:59:00"
+  mem: "10000"
+  pe: "smp 9"
+  qname: "scc"
+
+KATE_collapse_results_3ss:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+KATE_collapse_results_5ss:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+KATE_collapse_results_TSS:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+KATE_collapse_results_PAS:
+  time: "02:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+KATE_extend_tables_3ss:
+  time: "01:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+
+KATE_extend_tables_5ss:
+  time: "01:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+
+KATE_extend_tables_PAS:
+  time: "01:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+
+QPE_collapseTSS:
+  time: "06:00:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+QPE_filter_TSS_SCM_matrices:
+  time: "02:00:00"
+  mem: "25000"
+  pe: "smp 1"
+  qname: "scc"
+
+QPE_filter_merged_TSS_values:
+  time: "02:00:00"
+  mem: "25000"
+  pe: "smp 1"
+  qname: "scc"
+
+QPE_merge_TSS_values:
+  time: "02:00:00"
+  mem: "25000"
+  pe: "smp 1"
+  qname: "scc"
+
+QPE_quantifyTSS:
+  time: "05:00:00"
+  mem: "20000"
+  pe: "smp 1"
+  qname: "scc"
+
+RES_select_motifs:
+  time: "00:15:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+RES_prepare_Zscores_tables:
+  time: "00:30:00"
+  mem: "8000"
+  pe: "smp 1"
+  qname: "scc"
+
+RES_plot_Zscores_heatmaps:
+  time: "14:00:00"
+  mem: "20000"
+  pe: "smp 1"
+  qname: "scc"
+
+MAPP_collect_summary:
+  time: "05:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+
+MAPP_prepare_summary_table:
+  time: "05:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+
+MAPP_generate_report:
+  time: "05:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"
+  
+MAPP_summary_tarball:
+  time: "05:00:00"
+  mem: "5000"
+  pe: "smp 1"
+  qname: "scc"

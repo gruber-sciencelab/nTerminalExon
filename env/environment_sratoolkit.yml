@@ -1,0 +1,22 @@
+###############################################################################
+#
+#   Packages in conda virtual environment for SRAtoolkit
+#
+#   AUTHOR: Miguel_Barquin
+#   AFFILIATION: University_of_Konstaz
+#   CREATED: 20-03-2020
+#   CONTACT: miguel.barquin@uni-konstanz.de
+#
+###############################################################################
+---
+
+name: SRAtoolkit
+
+channels:
+  - bioconda
+  - conda-forge
+
+dependencies:
+  - sra-tools=3.0.3=h87f3376_0
+
+...

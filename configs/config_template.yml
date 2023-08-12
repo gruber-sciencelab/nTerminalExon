@@ -1,0 +1,82 @@
+###############################################################################
+#
+#   Configuration file nTE execution
+#
+#   AUTHOR: Maciej_Bak
+#   AFFILIATION: University_of_Basel
+#   MODIFICATION: Miguel_Barquin
+#   AFFILIATION: University_of_Konstaz
+#   CREATED: 20-03-2020
+#   MODIFIED: 14-02-2023
+#   CONTACT: miguel.barquin@uni-konstanz.de
+#
+###############################################################################
+---
+
+# Custom name for the analysis run
+analysis_name: "Dataset Test"
+
+################################################################################
+### Paths
+################################################################################
+
+# Pipeline directory
+nTE_directory: "xxx"
+
+# Path to the genomic annotation in GTF format
+genomic_annotation: "xxx"
+
+# Path to the genomic sequence in FASTA format
+# NOTE:
+# unfortunately there is no separate gffread flag for a genomic sequence index;
+# genome FASTA file should be accompanied by FASTA INDEX (.fai) file
+# in the same directory, under the same core name; in case it is not:
+# gffread will create the index on-the-fly and save it alongside the genomic sequence
+# (thus, the user requires write permission to the directory below in such scenario)
+genomic_sequence: "xxx"
+
+# Path to the genomic index generated with STAR
+# a new index will be created at the following path in two cases:
+# * no index is present yet
+# * modification date of the current index is older than the genomic resources
+genomic_index: "xxx"
+
+# Path to the design table with information about RNA-Seq samples
+analysis_design_table: "xxx"
+
+# Path to the directory with PWMs sequence logos
+# (required only for runs in "pwms" mode, otherwise - please provide "")
+seqlogo_directory: ""
+
+# Path to the list of PAS coordinates in BED format
+PAS_atlas: "xxx"
+
+################################################################################
+### Run parameters
+################################################################################
+
+# Biotype of genes & transcripts included in the analysis
+transcript_biotypes: "protein_coding"
+
+# STAR option during the mapping process: --sjdbOverhang
+# optimally, it should be set to read length - 1
+sjdbOverhang: 100
+
+# Boolean flag whether quality analysis and samples filtering should be executed
+quality_check: True
+
+# Minimal per-sample median TIN score (quality control) 
+min_median_TIN_score: 0.0
+
+# RNASeQC quality control cutoffs
+RNASeQC_min_mapping_rate: 0.5
+RNASeQC_min_unique_rate_of_mapped: 0.5
+RNASeQC_min_high_quality_rate: 0.0
+RNASeQC_max_intergenic_rate: 0.5
+RNASeQC_max_rRNA_rate: 0.5
+
+# Whether to unzip trimmed reads before STAR mapping or not
+# (necessary for some cluster systems)
+storage_efficient: False
+
+...

@@ -1,0 +1,94 @@
+{
+
+    "__default__":
+    {
+        "time": "00:01:00",
+        "cpus-per-task": "1",
+        "mem": "1G",
+        "output": "{params.LOG_cluster_log}-%j-%N.log"
+    },
+
+    "TEC_align_reads_F":
+    {
+        "time": "06:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "100G"
+    },
+
+    "TEC_align_reads_R":
+    {
+        "time": "06:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "100G"
+    },
+
+    "TEC_sort_aligned_reads_F":
+    {
+        "time": "01:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "20G"
+    },
+
+    "TEC_sort_aligned_reads_R":
+    {
+        "time": "01:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "20G"
+    },
+
+    "TEC_index_sorted_aligned_reads_F":
+    {
+        "time": "01:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "20G"
+    },
+
+    "TEC_index_sorted_aligned_reads_R":
+    {
+        "time": "01:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "20G"
+    },
+
+    "TEC_tectool_F":
+    {
+        "time": "06:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "100G"
+    },
+
+    "TEC_tectool_R":
+    {
+        "time": "06:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "100G"
+    },
+
+    "TEC_plot_novel_terminal_exons_F":
+    {
+        "time": "01:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "20G"
+    },
+
+    "TEC_plot_novel_terminal_exons_R":
+    {
+        "time": "01:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "20G"
+    },
+
+    "TEC_merging_forward_reverse_tsv":
+    {
+        "time": "00:10:00",
+        "cpus-per-task": "{threads}",
+        "mem": "10G"
+    },
+
+    "TEC_all_tsv":
+    {
+        "time": "01:00:00",
+        "cpus-per-task": "{threads}",
+        "mem": "20G"
+    }
+}
