@@ -1,0 +1,2 @@
+sample	fq1	fq2	condition	reference	adapter1	adapter2	library	color	id	id	cell	DiseaseStatus	LifeStage
+xxx	/path/to/xxx_1.fastq	/path/to/xxx_2.fastq	xxx	xxx	xxx	xxx	xxx	xxx	xxx	xxx	xxx	xxx	xxx
