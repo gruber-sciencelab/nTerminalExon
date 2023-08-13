@@ -8,7 +8,7 @@ Identification of novel Terminal Exons analysis using TECtool
 
 1. [Environment installation](#environment-installation)
 2. [nTE conda environment](#nte-conda-environment)
-3. [Execution test](#execution-test)
+3. [Download the required input files](#download-the-required-input-files)
 4. [Workflow execution](#workflow-execution)
 5. [Appendix A: Download and installation of Miniconda3 and Mamba](#appendix-a-download-and-installation-of-miniconda3-and-mamba)
 
@@ -22,18 +22,13 @@ wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 source .bashrc
 ```
-
-In addition, in order to execute workflows based on most-recent Snakemake versions it is essential to install Mamba alongside Conda. Mamba is basically Conda rewritten in C++ and it became the default front-end package manager utilized in Snakemake. For more information please visit this page.
-
-Mamba has to be installed in the base environment with:
+Mamba should be installed within the base environment as a requisite step.
 
 ```bash
 conda install -n base -c conda-forge mamba
 ```
 
-In the case there is this error:
-
- ModuleNotFoundError: No module named 'chardet'
+In the case you will have following error `ModuleNotFoundError: No module named 'chardet'`, install chardet package:
 
 ```bash
 pip install chardet charset_normalizer
@@ -41,15 +36,20 @@ pip install chardet charset_normalizer
 
 ## nTE conda environment
 
+The script file to create the conda nTE environment and the yml file with package dependencies are included. Create the environment:
+
 ```bash
 bash scripts/create-conda-environment.sh
 ```
+And activate it:
 
 ```bash
 conda activate nTE
 ```
 
-2. Download the resources
+## Download the required input files
+
+In order to analyze the data, some 
 
 ```bash
 bash scripts/download-ENSEMBL-resources.sh \
@@ -64,7 +64,7 @@ bash scripts/download-polyA-atlas.sh \
 ```
 
 3. Creation of design file
-We provide a teamplate, you have to fill in with bla bla bla
+We provide a template, you have to fill in with bla bla bla
 
 4. Create config file
 conda activate nTE
