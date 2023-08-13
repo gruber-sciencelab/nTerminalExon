@@ -14,7 +14,7 @@
 ---
 
 # Custom name for the analysis run
-analysis_name: "Dataset Test"
+analysis_name: "Dataset xxx"
 
 ################################################################################
 ### Paths
@@ -43,10 +43,6 @@ genomic_index: "xxx"
 
 # Path to the design table with information about RNA-Seq samples
 analysis_design_table: "xxx"
-
-# Path to the directory with PWMs sequence logos
-# (required only for runs in "pwms" mode, otherwise - please provide "")
-seqlogo_directory: ""
 
 # Path to the list of PAS coordinates in BED format
 PAS_atlas: "xxx"

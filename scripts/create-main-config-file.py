@@ -165,7 +165,7 @@ def main():
 
     if template["quality_check"]:
         updated_design_table = os.path.join(
-            template["MAPP_directory"],
+            template["nTE_directory"],
             "modules",
             "PREPROCESSING",
             default_output_dir_name,
@@ -181,7 +181,6 @@ def main():
 nTE_analysis_name: "{template["analysis_name"]}"
 nTE_pipeline_directory: "{template["nTE_directory"]}"
 nTE_pipeline_configfile: "{pipeline_configfile}"
-nTE_seqlogos_directory: "{template["seqlogo_directory"]}"
 
 ### module: PREPROCESSING
 PQA_scripts_dir: "{template["nTE_directory"]}/modules/PREPROCESSING/scripts"

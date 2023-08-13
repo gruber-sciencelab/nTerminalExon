@@ -44,23 +44,39 @@ rule all:
     Gathering all output
     """
     input:
-        TSV_new_design_table = expand(
+        PLOTS_DIR_F = expand(
             os.path.join(
-                "{PQA_output_dir}",
-                "design_table_quality_filtered.tsv"
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "plots",
+                "F",
             ),
-            PQA_output_dir = config["PQA_outdir"]
+            TEC_output_dir = config["TEC_outdir"],
+            sample = get_all_samples_IDs()
         ),
-        QC_plot = expand(
+            PLOTS_DIR_R = expand(
             os.path.join(
-                "{PQA_output_dir}",
-                "qc_plot.pdf"
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "{sample}",
+                "plots",
+                "R",
             ),
-            PQA_output_dir = config["PQA_outdir"]
+            TEC_output_dir = config["TEC_outdir"],
+            sample = get_all_samples_IDs()
+        ),
+            GENERAL_TSV = expand(
+            os.path.join(
+                "{TEC_output_dir}",
+                "tectool_quantification",
+                "general_nte.tsv"
+            ),
+            TEC_output_dir = config["TEC_outdir"]
         )
 
 ##############################################################################
 ### Include all MAPP modules:
 ##############################################################################
 
-include: "modules/PREPROCESSING/Snakefile"
+include: "modules/TERMINAL_EXON_CHARACTERIZATION/Snakefile"

@@ -1,13 +1,12 @@
 """
 ##############################################################################
 #
-#   Filter design table based on the quality of RNA-Seq samples.
+#   Unification of tsv per Sample
 #
-#   AUTHOR: Maciej_Bak
-#   AFFILIATION: University_of_Basel
-#   AFFILIATION: Swiss_Institute_of_Bioinformatics
-#   CONTACT: maciej.bak@unibas.ch
-#   CREATED: 02-05-2020
+#   AUTHOR: Miguel_Barquin
+#   AFFILIATION: University_of_Konstanz
+#   CONTACT: miguel.barquin@uni-konstanz.de
+#   CREATED: 24-05-022
 #   LICENSE: Apache_2.0
 #
 ##############################################################################
