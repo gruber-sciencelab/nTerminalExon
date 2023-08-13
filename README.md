@@ -9,8 +9,6 @@ Identification of novel Terminal Exons analysis using TECtool
 1. [Environment installation](#environment-installation)
 2. [nTE conda environment](#nte-conda-environment)
 3. [Download the required input files](#download-the-required-input-files)
-4. [Workflow execution](#workflow-execution)
-5. [Appendix A: Download and installation of Miniconda3 and Mamba](#appendix-a-download-and-installation-of-miniconda3-and-mamba)
 
 
 ## Environment installation: CONDA + MAMBA
