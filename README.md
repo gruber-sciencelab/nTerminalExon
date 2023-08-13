@@ -78,6 +78,8 @@ python scripts/create-main-config-file.py \
 
 ## Start the analysis
 
+
+
 ### Step 1: Sample preprocessing
 
 ```bash
@@ -87,17 +89,25 @@ cp snakefile/Snakefile_Step1_Preprocessing Snakefile
 nohup bash execution/run.sh \
   -c configs/config.yml \
   -e local \
- -n 8  \
+  -n 8  \
   -t conda >& run_preprocessing.txt &
 # remove the file
 rm Snakefile
 ```
+### Step 2: Terminal Exon Characterization
 
+```bash
+# copy the snake preprocessing file
+cp snakefile/Snakefile_Step2_TERMINAL_EXON_CHARACTERIZATION
+# Run the pipeline
 nohup bash execution/run.sh \
   -c configs/config.yml \
   -e local \
- -n 8  \
-  -t conda >& run_preprocessing.txt &
+  -n 8  \
+  -t conda >& run_terminal_exon.txt &
+# remove the file
+rm Snakefile
+```
 
 ### Step 2: Terminal Exon Characterization
 
