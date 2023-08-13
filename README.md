@@ -79,7 +79,28 @@ MAPP installation is therefore automatised and limitted to downloading the follo
 
 Explicar un poco como funciona, dirigir a sratoolkit github etc etc
 
-DEMO:
+# DEMO:
+
+## Step 1: Sample preprocessing
+
+```bash
+cp snakefile/Snakefile_Step1_Preprocessing Snakefile
+# Run the pipeline
+bash exection/run.sh
+# rm Snakefile
+
+```
+
+## Step 1: Terminal Exon Characterization
+
+```bash
+cp snakefile/Snakefile_Step2_Terminal_exon_characterization Snakefile
+# Run the pipeline
+bash exection/run.sh
+```
+
+Muestras + creacion design file
+
 
 1. Muestras + creacion design file
 conda activate sratoolkit
