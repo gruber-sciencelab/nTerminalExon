@@ -48,7 +48,7 @@ bash scripts/download-ENSEMBL-resources.sh \
   --species hsa \
   --output-directory resources_ENSEMBL_hsa
 ```
-A PolyA sites file is also required. The download process is also included:
+A PolyA sites file is also required. The download process from [atlas] is also included:
 
 ```bash
 bash scripts/download-polyA-atlas.sh \
@@ -58,7 +58,12 @@ bash scripts/download-polyA-atlas.sh \
 
 ## Creation of design file
 
-In order to start the analysis, some basic technical and biological information has to be provided. In pursuit of this, a tsv file has to be submited.
+In order to start the analysis, some basic technical and biological information has to be provided. In pursuit of this, a tsv file has to be submitted.
+
+* Avoid using special characters such as period (.), pipe (|), and whitespace in the IDs of samples and in the condition columns.
+* When filling the table, remember to input the paths for the forward reads in the "fq1" column and for the reverse reads in the "fq2" column. This rule applies even for single-end sequencing data. If the reads exclusively originate from the reverse strand, please leave the "fq1" field empty.
+* "adapter1" pertains to reads found in the "fq1" column, while "adapter2" pertains to reads found in the "fq2" column.
+* In the "library" column, you have the option to specify either "stranded" or "unstranded".
 
 4. Create config file
 conda activate nTE
@@ -116,3 +121,6 @@ modificacmos el config file con los paths al design file y tambien a los archivo
 creamos el config file
 
 4. Empezamos el analisis
+
+
+[atlas]: https://polyasite.unibas.ch/atlas
