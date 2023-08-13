@@ -26,12 +26,6 @@ Mamba should be installed within the base environment as a requisite step.
 conda install -n base -c conda-forge mamba
 ```
 
-In the case you will have following error `ModuleNotFoundError: No module named 'chardet'`, install chardet package:
-
-```bash
-pip install chardet charset_normalizer
-```
-
 ## nTE conda environment
 
 The script file to create the conda nTE environment and the yml file with package dependencies are included. Create the environment:
@@ -47,13 +41,14 @@ conda activate nTE
 
 ## Download the required input files
 
-In order to analyze the data, some 
+This analysis requires species-specific genomic sequence and annotation in FASTA and GTF formats from ENSEMBL servers. Included within this repository is a handy bash script that can assist in acquiring this data specifically for Homo sapiens:
 
 ```bash
 bash scripts/download-ENSEMBL-resources.sh \
   --species hsa \
   --output-directory resources_ENSEMBL_hsa
 ```
+A PolyA sites file is also required. The download process is also included:
 
 ```bash
 bash scripts/download-polyA-atlas.sh \
@@ -61,8 +56,9 @@ bash scripts/download-polyA-atlas.sh \
   --output-directory ATLAS2_hsa
 ```
 
-3. Creation of design file
-We provide a template, you have to fill in with bla bla bla
+## Creation of design file
+
+In order to start the analysis, some basic technical and biological information has to be provided. In pursuit of this, a tsv file has to be submited.
 
 4. Create config file
 conda activate nTE
