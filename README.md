@@ -66,7 +66,7 @@ A template file is provided.
 * "adapter1" pertains to reads found in the "fq1" column, while "adapter2" pertains to reads found in the "fq2" column.
 * In the "library" column, you have the option to specify either "stranded" or "unstranded".
 
-## Create config file
+## Create the config file
 conda activate nTE
 
 crear el config file:
@@ -77,15 +77,9 @@ python scripts/create-main-config-file.py \
   --pipeline-configfile configs/config.yml
 ```
 
-APPENDIX 1: how to download SRA samples
+## Start the analysis
 
-MAPP installation is therefore automatised and limitted to downloading the following repository (also possible with git clone command, provided Git version control system is available), navigating to the MAPP directory and running a shell script which will build the environment for the workflow. This may be achieved by the following command: bash scripts/create-conda-environment_sratoolkit.sh
-
-Explicar un poco como funciona, dirigir a sratoolkit github etc etc
-
-# DEMO:
-
-## Step 1: Sample preprocessing
+### Step 1: Sample preprocessing
 
 ```bash
 cp snakefile/Snakefile_Step1_Preprocessing Snakefile
@@ -95,7 +89,35 @@ bash exection/run.sh
 
 ```
 
-## Step 1: Terminal Exon Characterization
+### Step 2: Terminal Exon Characterization
+
+```bash
+cp snakefile/Snakefile_Step2_Terminal_exon_characterization Snakefile
+# Run the pipeline
+bash exection/run.sh
+```
+
+
+
+APPENDIX 1: how to download SRA samples
+
+MAPP installation is therefore automatised and limitted to downloading the following repository (also possible with git clone command, provided Git version control system is available), navigating to the MAPP directory and running a shell script which will build the environment for the workflow. This may be achieved by the following command: bash scripts/create-conda-environment_sratoolkit.sh
+
+Explicar un poco como funciona, dirigir a sratoolkit github etc etc
+
+# DEMO:
+
+### Step 1: Sample preprocessing
+
+```bash
+cp snakefile/Snakefile_Step1_Preprocessing Snakefile
+# Run the pipeline
+bash exection/run.sh
+# rm Snakefile
+
+```
+
+### Step 2: Terminal Exon Characterization
 
 ```bash
 cp snakefile/Snakefile_Step2_Terminal_exon_characterization Snakefile
