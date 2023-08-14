@@ -77,7 +77,7 @@ A template file is provided: *designfile_template.tsv*.
 
 ## Create the config file
 
-The configuration details for this Snakemake pipeline are defined within the config.yml file. This generation relies on a template configuration file named *config_template.yml* (located in folder configs). It is the user's responsibility to adjust this template file manually. After customizing the template to their satisfaction, they can generate a pipeline configuration file by executing a Python script tailored to it.
+The configuration details for this Snakemake pipeline are defined within the config.yml file. This generation relies on a template configuration file named *config_template.yml* (located in folder configs). It is the user's responsibility to adjust this template file manually. Don't leave any path without information, the process will not be completed successfully if it's not well done. After customizing the template to their satisfaction, they can generate a pipeline configuration file by executing a Python script tailored to it.
 
 ```bash
 python scripts/create-main-config-file.py \
