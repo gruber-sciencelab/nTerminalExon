@@ -11,6 +11,9 @@ Identification of novel Terminal Exons analysis using TECtool. Please, download 
 3. [nTE conda environment](#nte-conda-environment)
 4. [Download the required input files](#download-the-required-input-files)
 5. [Create the design file](#create-the-design-file)
+6. [Create the config file](#create-the-config-file)
+7. [Start the analysis](#start-the-analysis)
+8. [DEMO](#demo)
 
 ## Requirements
 
