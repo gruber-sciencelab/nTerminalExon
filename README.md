@@ -86,8 +86,9 @@ python scripts/create-main-config-file.py \
 
 ## Start the analysis
 
-The analysis workflow is divided into two different steps. The first one is the Preprocessing one, which contains the necessary rules to filter the sequencing files (following the quality control instructions provided in the config file). At the end of this step, a new design file (*design_table_quality_filtered.tsv*) is created, containing only those samples that passed the filter. This file is created as an output file inside PREPROCESSING module.
-To be sure that the entire process is successfully done, check the text file containing the output information, and verify that 100% of the steps are done.
+The analysis workflow comprises two distinct steps. The initial step is Preprocessing, encompassing essential rules to filter the sequencing files, adhering to the quality control guidelines outlined in the config file. Upon completing this phase, a new design file (design_table_quality_filtered.tsv) is generated, housing exclusively those samples that have successfully cleared the filter criteria. This file is produced as an output within the PREPROCESSING module.
+
+To ensure the seamless completion of the entire process, review the text file containing output information and confirm the successful execution of 100% of the steps.
 
 ### Step 1: Sample preprocessing
 
@@ -115,11 +116,11 @@ Once you have finished, you can delete the snakefile.
 # remove the file
 rm Snakefile
 ```
-Once you have verified that all of the steps are done, and the new design file was created in the previous step, proceed with Step 2.
+Once you've confirmed the completion of all steps and ensured the creation of the new design file in the preceding stage, you can now move on to Step 2.
 
 ### Step 2: Terminal Exon Characterization
 
-The second step 
+The second step involves the necessary processes for analyzing the samples using the [TECtool] procedure. This will result in a tsv list (per fastq file) containing the newly identified terminal exons, accompanied by a pdf file containing sashimi plots of these terminal exons, and an enriched gtf file. A final step will consolidate the tsv results, creating a definitive file comprising the novel terminal exons per sample.
 
 ```bash
 # copy the snake preprocessing file
@@ -157,3 +158,4 @@ Download the samples SRR9274306 and SRR9274314 using prefetch *name of the sampl
 Once you have the samples, you can start the analysys following the steps described previously.
 
 [atlas]: https://polyasite.unibas.ch/atlas
+[TECtool]: https://github.com/zavolanlab/TECtool
