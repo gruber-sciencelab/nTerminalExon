@@ -105,11 +105,6 @@ nohup bash execution/run.sh \
   -n 8  \
   -t conda >& run_preprocessing.txt &
 ```
-
-```bash
-# remove the file
-rm Snakefile
-```
 Once you have finished, you can delete the snakefile.
 
 ```bash
