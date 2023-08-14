@@ -1676,10 +1676,6 @@ rule PQA_filter_design_table:
             PQA_output_dir = config["PQA_outdir"],
             fq_file = get_all_fastq_files()
         ),
-        SCRIPT_PLOT_ = os.path.join(
-            config["PQA_scripts_dir"],
-            "script_qc.py"
-        ),
         SCRIPT_ = os.path.join(
             config["PQA_scripts_dir"],
             "filter-design-table.py"
@@ -1689,10 +1685,6 @@ rule PQA_filter_design_table:
         TSV_new_design_table = os.path.join(
             "{PQA_output_dir}",
             "design_table_quality_filtered.tsv"
-        ),
-        QC_plot = os.path.join(
-            "{PQA_output_dir}",
-            "qc_plot.pdf"
         )
 
     params:
@@ -1743,19 +1735,6 @@ rule PQA_filter_design_table:
 
     shell:
         """
-        python {input.SCRIPT_PLOT_} \
-        --mapping-quality-scores-rnaseqc {input.TSV_mapping_quality_table_rnaseqc} \
-        --mapping-quality-scores-star {input.TSV_mapping_quality_table_star} \
-        --TIN-scores {input.TSV_median_TIN} \
-        --design-table-in {input.TSV_design_file} \
-        --qc-plot-out {output.QC_plot} \
-        --min-median-TIN-cutoff {params.FLOAT_min_median_TIN_score} \
-        --min-mapping-rate {params.FLOAT_RNASeQC_min_mapping_rate} \
-        --min-unique-rate-of-mapped {params.FLOAT_RNASeQC_min_unique_rate_of_mapped} \
-        --min-high-quality-rate {params.FLOAT_RNASeQC_min_high_quality_rate} \
-        --max-intergenic-rate {params.FLOAT_RNASeQC_max_intergenic_rate} \
-        --max-rRNA-rate {params.FLOAT_RNASeQC_max_rRNA_rate} \
-        &&
         python {input.SCRIPT_} \
         --mapping-quality-scores-rnaseqc {input.TSV_mapping_quality_table_rnaseqc} \
         --mapping-quality-scores-star {input.TSV_mapping_quality_table_star} \
