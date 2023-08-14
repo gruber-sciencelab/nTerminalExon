@@ -66,13 +66,15 @@ rule all:
             TEC_output_dir = config["TEC_outdir"],
             sample = get_all_samples_IDs()
         ),
-            GENERAL_TSV = expand(
+            FINAL_TSV = expand(
             os.path.join(
                 "{TEC_output_dir}",
                 "tectool_quantification",
-                "general_nte.tsv"
+                "{sample}",
+                "final_nte.tsv"
             ),
-            TEC_output_dir = config["TEC_outdir"]
+            TEC_output_dir = config["TEC_outdir"],
+            sample = get_all_samples_IDs()
         )
 
 ##############################################################################
