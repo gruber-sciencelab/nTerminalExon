@@ -226,7 +226,7 @@ fi
 
 # check for pre-computed conda environments
 if [ -z "$CONDAPREFIX" ]; then
-    CONDAPREFIX="${PWD}/../../TIERI_conda_envs"
+    CONDAPREFIX="${PWD}/../../nte_conda_envs"
 fi
 
 # check for pre-computed singularity containers
