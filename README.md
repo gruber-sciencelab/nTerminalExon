@@ -76,7 +76,7 @@ A template file is provided: *designfile_template.tsv*.
 
 ## Create the config file
 
-The configuration details for this Snakemake pipeline are defined within the config.yml file. This generation relies on a template configuration file named *config_template.yml* (located in folder configs). It is the user's responsibility to manually adjust this template file. After customizing the template to their satisfaction, they can generate a pipeline configuration file by executing a Python script tailored to it.
+The configuration details for this Snakemake pipeline are defined within the config.yml file. This generation relies on a template configuration file named *config_template.yml* (located in folder configs). It is the user's responsibility to adjust this template file manually. After customizing the template to their satisfaction, they can generate a pipeline configuration file by executing a Python script tailored to it.
 
 ```bash
 python scripts/create-main-config-file.py \
@@ -86,7 +86,8 @@ python scripts/create-main-config-file.py \
 
 ## Start the analysis
 
-Start with Part 1 analysis
+The analysis workflow is divided into two different steps. The first one is the Preprocessing one, which contains the necessary rules to filter the sequencing files (following the quality control instructions provided in the config file). At the end of this step, a new design file (*design_table_quality_filtered.tsv*) is created, containing only those samples that passed the filter. This file is created as an output file inside PREPROCESSING module.
+To be sure that the entire process is successfully done, check the text file containing the output information, and verify that 100% of the steps are done.
 
 ### Step 1: Sample preprocessing
 
@@ -114,9 +115,11 @@ Once you have finished, you can delete the snakefile.
 # remove the file
 rm Snakefile
 ```
-Start with Part 2 analysis
+Once you have verified that all of the steps are done, and the new design file was created in the previous step, proceed with Step 2.
 
 ### Step 2: Terminal Exon Characterization
+
+The second step 
 
 ```bash
 # copy the snake preprocessing file
