@@ -79,7 +79,7 @@ python scripts/create-main-config-file.py \
 
 ## Start the analysis
 
-
+Start with Part 1 analysis
 
 ### Step 1: Sample preprocessing
 
@@ -95,6 +95,14 @@ nohup bash execution/run.sh \
 # remove the file
 rm Snakefile
 ```
+Once you have finished, you can delete the snakefile.
+
+```bash
+# remove the file
+rm Snakefile
+```
+Start with Part 2 analysis
+
 ### Step 2: Terminal Exon Characterization
 
 ```bash
@@ -106,67 +114,27 @@ nohup bash execution/run.sh \
   -e local \
   -n 8  \
   -t conda >& run_terminal_exon.txt &
+```
+Once you have finished, you can delete the snakefile.
+
+```bash
 # remove the file
 rm Snakefile
 ```
 
-### Step 2: Terminal Exon Characterization
-
-```bash
-cp snakefile/Snakefile_Step2_Terminal_exon_characterization Snakefile
-# Run the pipeline
-bash exection/run.sh
-```
-
-
-
-APPENDIX 1: how to download SRA samples
-
-MAPP installation is therefore automatised and limitted to downloading the following repository (also possible with git clone command, provided Git version control system is available), navigating to the MAPP directory and running a shell script which will build the environment for the workflow. This may be achieved by the following command: bash scripts/create-conda-environment_sratoolkit.sh
-
-Explicar un poco como funciona, dirigir a sratoolkit github etc etc
-
 # DEMO:
 
-### Step 1: Sample preprocessing
+To start with the DEMO, start to download the sample files from SRA data repository. To create the environment:
+```bash
+bash scripts/create-conda-environment_sratoolkit.sh
+```
+And activate it:
 
 ```bash
-cp snakefile/Snakefile_Step1_Preprocessing Snakefile
-# Run the pipeline
-bash exection/run.sh
-# rm Snakefile
-
-```
-
-### Step 2: Terminal Exon Characterization
-
-```bash
-cp snakefile/Snakefile_Step2_Terminal_exon_characterization Snakefile
-# Run the pipeline
-bash exection/run.sh
-```
-
-Muestras + creacion design file
-
-
-1. Muestras + creacion design file
 conda activate sratoolkit
-prefetch sra bla bla bla bla
+```
+Download the samples SRR9274306 and SRR9274306 using prefetch *name of the sample* and fasterq-dump *name of the sample*
 
-SRR9274314
-SRR9274306
-
-
-creacion design file
-
-2. Descargar los archivos de referencia
-
-3. Empezar el analisis
-conda activate nTE
-modificacmos el config file con los paths al design file y tambien a los archivos de referencia
-creamos el config file
-
-4. Empezamos el analisis
-
+Once you have the samples, you can start the analysys following the steps described previously.
 
 [atlas]: https://polyasite.unibas.ch/atlas
