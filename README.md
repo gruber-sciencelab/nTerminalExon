@@ -3,6 +3,7 @@
 # novel Terminal Exon
 
 Identification of novel Terminal Exons analysis using TECtool. Please, download this repository with 'git clone' and follow the instructions.
+Please be sure to execute the instructions in this directory folder. 
 
 ## Table of Contents
 
