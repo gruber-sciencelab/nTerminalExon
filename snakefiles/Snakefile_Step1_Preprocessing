@@ -50,13 +50,6 @@ rule all:
                 "design_table_quality_filtered.tsv"
             ),
             PQA_output_dir = config["PQA_outdir"]
-        ),
-        QC_plot = expand(
-            os.path.join(
-                "{PQA_output_dir}",
-                "qc_plot.pdf"
-            ),
-            PQA_output_dir = config["PQA_outdir"]
         )
 
 ##############################################################################
