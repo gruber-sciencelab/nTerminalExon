@@ -6,11 +6,15 @@ Identification of novel Terminal Exons analysis using TECtool. Please, download 
 
 ## Table of Contents
 
-1. [Environment installation](#environment-installation)
-2. [nTE conda environment](#nte-conda-environment)
-3. [Download the required input files](#download-the-required-input-files)
-4. [Create the design file](#create-the-design-file)
+1. [Requirements](#requirements)
+2. [Environment installation](#environment-installation)
+3. [nTE conda environment](#nte-conda-environment)
+4. [Download the required input files](#download-the-required-input-files)
+5. [Create the design file](#create-the-design-file)
 
+## Requirements
+
+The nTerminalExon workflow can be used in both local and cluster computing setups. Researchers can opt for local execution on a single machine, suitable for smaller datasets, with a recommended system configuration of at least 16 cores and 100GB of RAM. Alternatively, utilizing a cluster environment enhances efficiency, particularly for larger-scale analyses, by harnessing parallel processing. 
 
 ## Environment installation: CONDA + MAMBA
 
