@@ -150,8 +150,8 @@ And activate it:
 conda activate sratoolkit
 ```
 Download the samples SRR9274306 and SRR9274314 using prefetch *name of the sample* and fasterq-dump *name of the sample*
-
-Once you have the samples, you can start the analysys following the steps described previously.
+We provide a design file with the information to start the analysts (*DEMO.tsv*). Please, modify the file including the paths of the fastq files, and use the file as a design file for this demo.
+Once you have the samples, you can start the analyses following the steps described previously.
 
 [atlas]: https://polyasite.unibas.ch/atlas
 [TECtool]: https://github.com/zavolanlab/TECtool
