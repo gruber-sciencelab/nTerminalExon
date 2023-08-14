@@ -36,10 +36,11 @@ genomic_annotation: "xxx"
 genomic_sequence: "xxx"
 
 # Path to the genomic index generated with STAR
-# a new index will be created at the following path in two cases:
-# * no index is present yet
-# * modification date of the current index is older than the genomic resources
-genomic_index: "xxx"
+# Provide the path where the folder of the genomic index will be created
+# (in the case the index is not present or the date of the current index is older
+# than the genomic resources).
+# Don't create the folder by yourself. The workflow will do it automatically.
+genomic_index: "xxx/STAR_index"
 
 # Path to the design table with information about RNA-Seq samples
 analysis_design_table: "xxx"
