@@ -85,13 +85,19 @@ Start with Part 1 analysis
 
 ```bash
 # copy the snake preprocessing file
-cp snakefile/Snakefile_Step1_Preprocessing Snakefile
+cp snakefiles/Snakefile_Step1_Preprocessing Snakefile
+```
+
+```bash
 # Run the pipeline
 nohup bash execution/run.sh \
   -c configs/config.yml \
   -e local \
   -n 8  \
   -t conda >& run_preprocessing.txt &
+```
+
+```bash
 # remove the file
 rm Snakefile
 ```
@@ -107,7 +113,10 @@ Start with Part 2 analysis
 
 ```bash
 # copy the snake preprocessing file
-cp snakefile/Snakefile_Step2_TERMINAL_EXON_CHARACTERIZATION
+cp snakefiles/Snakefile_Step2_TERMINAL_EXON_CHARACTERIZATION Snakefile
+```
+
+```bash
 # Run the pipeline
 nohup bash execution/run.sh \
   -c configs/config.yml \
@@ -133,7 +142,7 @@ And activate it:
 ```bash
 conda activate sratoolkit
 ```
-Download the samples SRR9274306 and SRR9274306 using prefetch *name of the sample* and fasterq-dump *name of the sample*
+Download the samples SRR9274306 and SRR9274314 using prefetch *name of the sample* and fasterq-dump *name of the sample*
 
 Once you have the samples, you can start the analysys following the steps described previously.
 
