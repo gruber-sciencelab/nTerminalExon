@@ -153,7 +153,9 @@ Download the samples SRR9274306 and SRR9274314 using prefetch *name of the sampl
 We provide a design file with the information to start the analysts (*DEMO.tsv*). Please, modify the file including the paths of the fastq files, and use the file as a design file for this demo.
 Once you have the samples, you can start the analyses following the steps described previously.
 
-Parts of the code have been taken and/or adapted from the MAPP GitHub repository
+Parts of the code have been taken and/or adapted from the [MAPP] GitHub [repository]
 
 [atlas]: https://polyasite.unibas.ch/atlas
 [TECtool]: https://github.com/zavolanlab/TECtool
+[MAPP]: https://www.biorxiv.org/content/10.1101/2022.01.09.475576v1
+[repository]: https://github.com/gruber-sciencelab/MAPP
