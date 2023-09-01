@@ -1,16 +1,17 @@
 ##############################################################################
 #
-#   Snakemake pipeline: MAPP
+#   Snakemake pipeline is based on the framework of MAPP 
+#   (https://github.com/gruber-sciencelab/MAPP)
+#   Terminal exon characterization using TECtool
 #
-#   AUTHOR: Maciej_Bak
-#   AFFILIATION: University_of_Basel
-#   AFFILIATION: Swiss_Institute_of_Bioinformatics
-#   CONTACT: maciej.bak@unibas.ch
-#   CREATED: 30-06-2020
+#   AUTHOR: Miguel_Barquin
+#   AFFILIATION: University_of_Konstanz
+#   CONTACT: miguel.barquin@uni-konstanz.de
+#   CREATED: 24-05-2022
 #   LICENSE: Apache_2.0
 #
 ##############################################################################
-#hola
+
 # imports
 import sys
 import os

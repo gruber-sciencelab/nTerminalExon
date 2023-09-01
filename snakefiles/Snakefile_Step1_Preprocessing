@@ -1,16 +1,16 @@
 ##############################################################################
 #
-#   Snakemake pipeline: MAPP
+#   Snakemake pipeline is based on the framework of MAPP 
+#   (https://github.com/gruber-sciencelab/MAPP)
+#   Initial processing and quality analysis of RNA-Seq data
 #
 #   AUTHOR: Maciej_Bak
 #   AFFILIATION: University_of_Basel
-#   AFFILIATION: Swiss_Institute_of_Bioinformatics
-#   CONTACT: maciej.bak@unibas.ch
-#   CREATED: 30-06-2020
+#   CREATED: 25-04-2020
 #   LICENSE: Apache_2.0
 #
-##############################################################################
-#hola
+###############################################################################
+
 # imports
 import sys
 import os

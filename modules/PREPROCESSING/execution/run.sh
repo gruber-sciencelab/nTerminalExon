@@ -4,8 +4,6 @@
 #
 #   AUTHOR: Maciej_Bak
 #   AFFILIATION: University_of_Basel
-#   AFFILIATION: Swiss_Institute_of_Bioinformatics
-#   CONTACT: maciej.bak@unibas.ch
 #   CREATED: 29-11-2021
 #   LICENSE: Apache_2.0
 #
